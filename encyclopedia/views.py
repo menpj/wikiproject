@@ -11,6 +11,8 @@ import markdown2
 
 import re
 
+import random
+
 def writetofile(name,entryBody):
     file1 = open(f"encyclopedia/templates/wiki/{name}.html","w")
     file1.write('{% extends "encyclopedia/layout.html" %}\n')
@@ -38,6 +40,26 @@ def index(request):
 
 def newPageError(request):
     return render(request, "encyclopedia/newpageerror.html")
+
+def displaypage(request,name):
+    entryBody=util.get_entry(name)
+
+    print(entryBody)
+    if entryBody:
+        entryBody= markdown2.markdown(entryBody)
+        writetofile(name,entryBody)
+        #file1 = open(f"encyclopedia/templates/wiki/{name}.html","w")
+        #file1.write('{% extends "encyclopedia/layout.html" %}\n')
+        #file1.write('{% block body %}\n')
+        #file1.write(entryBody)
+        #file1.write('\n{% endblock %}')
+
+        #file1.close()
+        return HttpResponseRedirect(f"wiki/{name}")
+    else:
+        return HttpResponseRedirect("encyclopedia/content.html", {
+            "content": None
+        })
 
 #def content(request):
 def wiki(request,name):
@@ -186,3 +208,9 @@ def editPage(request,name):
     
     return render(request,"encyclopedia/editpage.html",{"name": name,"form": EditForm(name)})
     
+
+def randomPage(request):
+    entries=util.list_entries()
+    
+
+    return displaypage(request,random.choice(entries))

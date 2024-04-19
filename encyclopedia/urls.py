@@ -13,6 +13,7 @@ urlpatterns = [
     path("newPage",views.newPage,name="newPage"),
     path("newPageError",views.newPageError,name="newPageError"),
     path("editPage/<str:name>",views.editPage,name="editPage"),
-    path("editPage",views.editPage,name="editPage")
+    path("editPage",views.editPage,name="editPage"),
+    path("randomPage",views.randomPage,name="randomPage")
     
 ]

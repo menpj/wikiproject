@@ -167,16 +167,7 @@ class EditForm(forms.Form):
     #def initial(self,name):
     #    self.titleName==name
     #def __init__(name):
-    def __init__(self,name):
-        super().__init__()
-        print("test")
-        self.titleName=name
-        print("test 2")
-        self.fields['title'].initial=name
-        print("test 4")
-        entryBody=util.get_entry(name)
-        print("test 5")
-        self.fields['body'].initial= entryBody
+    
         
         #self.title=forms.CharField(label="Page Title",initial="test"   ,max_length=100)
         #self.body=forms.CharField(label="Page Body",widget=forms.Textarea,initial="sample body")
@@ -197,7 +188,27 @@ def editPage(request,name):
             body=form.cleaned_data["body"]
             print(title)
             print(body)
-            return HttpResponseRedirect(f"wiki/{title}")
+
+
+            newfile= open(f"entries/{title}.md","w")
+            newfile.write(body)
+            newfile.close()
+
+            entryBody=util.get_entry(title)
+            entryBody= markdown2.markdown(entryBody)
+            #file1 = open(f"encyclopedia/templates/wiki/{title}.html","w")
+            #file1.write('{% extends "encyclopedia/layout.html" %}\n')
+            #file1.write('{% block body %}\n')
+            #file1.write(entryBody)
+            #file1.write('\n{% endblock %}')
+            #file1.close()
+            writetofile(title,entryBody)
+            #return render(request, f"wiki/{title}.html")
+            #return HttpResponseRedirect(f"wiki/{title}")
+
+
+            #return HttpResponseRedirect(f"wiki/{title}")
+            return render(request,f"wiki/{title}.html")
         else:
             return render(request,"encyclopedia/editpage.html",{
                 "form":form
@@ -206,7 +217,9 @@ def editPage(request,name):
 
 
     
-    return render(request,"encyclopedia/editpage.html",{"name": name,"form": EditForm(name)})
+    entryBody=util.get_entry(name)
+    
+    return render(request,"encyclopedia/editpage.html",{"name": name,"form": EditForm(initial={'title':name, 'body':entryBody})})
     
 
 def randomPage(request):

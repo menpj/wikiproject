@@ -1,4 +1,4 @@
-Designed a Wikipedia-like online encyclopedia. Project is implemented using Django HTML and Markdown.
+Designed an online encyclopedia. Project is implemented using Django HTML and Markdown.
 Stored encyclopedia entries using a markup language called Markdown. 
 
 Entry Page: Visiting /wiki/TITLE, where TITLE is the title of an encyclopedia entry, renders a page that displays the contents of that entry.
